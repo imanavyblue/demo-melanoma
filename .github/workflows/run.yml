@@ -6,7 +6,7 @@ on:
       - main
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 7'  # รันทุกวันอาทิตย์เวลา 00:00 UTC
+    - cron: '0 0 * * 0'  # รันทุกวันอาทิตย์เวลา 00:00 UTC
 
 jobs:
   train_model:
