@@ -29,21 +29,22 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install wandb
-          pip install huggingface_hub  # ติดตั้ง Hugging Face CLI
 
-      # Step 4: Log in to W&B using API Key from GitHub Secrets
-      - name: Log in to Weights and Biases
+      # Step 4: Set WANDB_API_KEY environment variable (No need for wandb login)
+      - name: Set WANDB_API_KEY
         env:
-          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
+          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}  # ดึง API Key จาก GitHub Secrets
         run: |
-          wandb login --relogin
+          echo "WANDB_API_KEY is set."
 
       # Step 5: Run training script
       - name: Train model
+        env:
+          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}  # ตั้ง WANDB_API_KEY เป็น environment variable
         run: |
           python train.py
 
-      # Step 6: Upload model to Hugging Face
+      # Step 6: Upload model to Hugging Face (Optional)
       - name: Upload model to Hugging Face
         run: |
           huggingface-cli upload inceptionv3_epoch_best.weights.h5 --repo suprawansr20/melanoma-model
