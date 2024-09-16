@@ -30,9 +30,12 @@ jobs:
           pip install -r requirements.txt
           pip install wandb
 
-      # Step 4: Log in to W&B
+      # Step 4: Log in to W&B using API Key from GitHub Secrets
       - name: Log in to Weights and Biases
-        run: wandb login ${{ secrets.WANDB_API_KEY }}
+        env:
+          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}  # ดึง API Key จาก GitHub Secrets
+        run: |
+          echo $WANDB_API_KEY | wandb login --relogin
 
       # Step 5: Run training script
       - name: Train model
@@ -42,11 +45,11 @@ jobs:
       # Step 6: Upload model to Hugging Face (Optional)
       - name: Upload model to Hugging Face
         run: |
-          huggingface-cli upload inceptionv3_epoch_best.weights.h5 --repo Suphawan/Melanoma-3
+          huggingface-cli upload inceptionv3_epoch_best.weights.h5 --repo suprawansr20/melanoma-model
 
       # Step 7: Archive logs and artifacts (Optional)
       - name: Archive training logs
-        uses: actions/upload-artifact@v3  # เปลี่ยนเป็น v3
+        uses: actions/upload-artifact@v3
         with:
           name: training-logs
           path: wandb/
