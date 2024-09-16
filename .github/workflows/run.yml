@@ -1,0 +1,52 @@
+name: Retrain InceptionV3 Model
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 7'  # รันทุกวันอาทิตย์เวลา 00:00 UTC
+
+jobs:
+  train_model:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install wandb
+
+      # Step 4: Log in to W&B
+      - name: Log in to Weights and Biases
+        run: wandb login ${{ secrets.WANDB_API_KEY }}
+
+      # Step 5: Run training script
+      - name: Train model
+        run: |
+          python train.py
+
+      # Step 6: Upload model to Hugging Face (Optional)
+      - name: Upload model to Hugging Face
+        run: |
+          huggingface-cli upload inceptionv3_epoch_best.weights.h5 --repo Suphawan/Melanoma-3
+
+      # Step 7: Archive logs and artifacts (Optional)
+      - name: Archive training logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: training-logs
+          path: wandb/
