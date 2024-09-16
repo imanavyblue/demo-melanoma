@@ -29,6 +29,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install wandb
+          pip install huggingface_hub  # ติดตั้ง Hugging Face CLI
 
       # Step 4: Set WANDB_API_KEY environment variable (No need for wandb login)
       - name: Set WANDB_API_KEY
