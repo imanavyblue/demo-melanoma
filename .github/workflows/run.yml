@@ -30,15 +30,15 @@ jobs:
           pip install -r requirements.txt
           pip install wandb
 
-      # Step 4: Log in to W&B using API Key from GitHub Secrets
-      - name: Log in to Weights and Biases
-        env:
-          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}  # ดึง API Key จาก GitHub Secrets
+      # Step 4: Set WANDB_API_KEY environment variable
+      - name: Set WANDB_API_KEY
         run: |
-          echo $WANDB_API_KEY | wandb login --relogin
-
+          export WANDB_API_KEY=${{ secrets.WANDB_API_KEY }}
+      
       # Step 5: Run training script
       - name: Train model
+        env:
+          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}  # ตั้ง WANDB_API_KEY เป็น environment variable
         run: |
           python train.py
 
