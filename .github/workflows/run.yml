@@ -48,7 +48,7 @@ jobs:
       # Step 6: Upload model to Hugging Face (Optional)
       - name: Upload model to Hugging Face
         run: |
-          huggingface-cli upload inceptionv3_epoch_best.weights.h5 Suphawan/Melanoma-3 --repo-type model
+          huggingface-cli upload inceptionv3_epoch_best.weights.h5 --repo-id Suphawan/Melanoma-3 --repo-type model
 
       # Step 7: Archive training logs and artifacts (Optional)
       - name: Archive training logs
