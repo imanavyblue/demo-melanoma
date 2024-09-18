@@ -89,10 +89,10 @@ from wandb.integration.keras import WandbMetricsLogger, WandbModelCheckpoint
 
 metrics_logger = WandbMetricsLogger()
 model_checkpoint = WandbModelCheckpoint(
-    filepath='inceptionv3_epoch_{epoch:02d}.weights.h5',  # บันทึกเป็น .h5 เฉพาะ weights
+    filepath='Inception_V3.h5',  # บันทึกโมเดลเป็น InceptionV3.h5
     monitor='val_loss',  # ติดตามค่า val_loss
     save_best_only=True,  # บันทึกเฉพาะโมเดลที่ดีที่สุด
-    save_weights_only=True  # บันทึกเฉพาะ weights เท่านั้น
+    save_weights_only=False  # บันทึกทั้งโมเดล
 )
 
 # Train the model
