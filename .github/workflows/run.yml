@@ -50,7 +50,7 @@ jobs:
         env:
           HF_API_TOKEN: ${{ secrets.HF_API_TOKEN }}  # ใช้ Hugging Face API token
         run: |
-          huggingface-cli upload inceptionv3_epoch_best.weights.h5 --repo-type model --token $HF_API_TOKEN --repo Suphawan/Melanoma-3
+          huggingface-cli upload inceptionv3_epoch_best.weights.h5 Suphawan/Melanoma-3 --repo-type space --token $HF_API_TOKEN
 
       # Step 7: Archive training logs and artifacts (Optional)
       - name: Archive training logs
