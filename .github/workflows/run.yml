@@ -45,10 +45,12 @@ jobs:
         run: |
           python train.py
 
-      # Step 6: Upload model to Hugging Face (Optional)
+      # Step 6: Upload model to Hugging Face
       - name: Upload model to Hugging Face
+        env:
+          HF_API_TOKEN: ${{ secrets.HF_API_TOKEN }}  # ใช้ Hugging Face API token
         run: |
-          huggingface-cli upload inceptionv3_epoch_best.weights.h5 Suphawan/Melanoma-3 --repo-type model --path inceptionv3_best_model.h5
+          huggingface-cli upload inceptionv3_epoch_best.weights.h5 Suphawan/Melanoma-3 --repo-type model --token $HF_API_TOKEN
 
       # Step 7: Archive training logs and artifacts (Optional)
       - name: Archive training logs
