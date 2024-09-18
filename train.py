@@ -88,21 +88,29 @@ early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weig
 from wandb.integration.keras import WandbMetricsLogger, WandbModelCheckpoint
 
 metrics_logger = WandbMetricsLogger()
-model_checkpoint = WandbModelCheckpoint(
-    filepath='Inception_V3.h5',  # บันทึกโมเดลเป็น InceptionV3.h5
-    monitor='val_loss',  # ติดตามค่า val_loss
-    save_best_only=True,  # บันทึกเฉพาะโมเดลที่ดีที่สุด
-    save_weights_only=False  # บันทึกทั้งโมเดล
+# WandB ModelCheckpoint for logging in WandB (with .keras format)
+wandb_checkpoint = WandbModelCheckpoint(
+    filepath='InceptionV3.keras',  # บันทึกเป็น .keras
+    monitor='val_loss',
+    save_best_only=True,
+    save_weights_only=False
 )
 
-# Train the model
+# Keras ModelCheckpoint for saving .h5 model
+h5_checkpoint = ModelCheckpoint(
+    filepath='InceptionV3.h5',  # บันทึกเป็น .h5
+    monitor='val_loss',
+    save_best_only=True,
+    save_weights_only=False
+)
+
+# Train the model with both checkpoints
 history = model.fit(
     train_generator,
     epochs=epochs,
     validation_data=validation_generator,
-    callbacks=[early_stopping, metrics_logger, model_checkpoint]
+    callbacks=[early_stopping, metrics_logger, wandb_checkpoint, h5_checkpoint]  # ใช้ทั้งสอง callback
 )
-
 # Evaluate the model
 evaluation_results = model.evaluate(validation_generator)
 val_loss, val_accuracy = evaluation_results[0], evaluation_results[1]
