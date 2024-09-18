@@ -7,6 +7,8 @@ from tensorflow.keras.layers import GlobalAveragePooling2D, Dense
 from tensorflow.keras.models import Model
 from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, recall_score, f1_score
+from wandb.integration.keras import WandbMetricsLogger, WandbModelCheckpoint
+from tensorflow.keras.callbacks import ModelCheckpoint
 import seaborn as sns
 import matplotlib.pyplot as plt
 
