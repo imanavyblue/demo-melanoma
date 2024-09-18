@@ -92,26 +92,27 @@ from wandb.integration.keras import WandbMetricsLogger, WandbModelCheckpoint
 metrics_logger = WandbMetricsLogger()
 # WandB ModelCheckpoint for logging in WandB (with .keras format)
 wandb_checkpoint = WandbModelCheckpoint(
-    filepath='InceptionV3.keras',  # บันทึกเป็น .keras
+    filepath='InceptionV3_epoch_{epoch:02d}.keras',  # เพิ่ม {epoch:02d}
     monitor='val_loss',
     save_best_only=True,
     save_weights_only=False
 )
 
-# Keras ModelCheckpoint for saving .h5 model
-h5_checkpoint = ModelCheckpoint(
-    filepath='InceptionV3.h5',  # บันทึกเป็น .h5
-    monitor='val_loss',
-    save_best_only=True,
-    save_weights_only=False
-)
+# Custom callback to save model as .h5 after training
+class SaveH5Callback(tf.keras.callbacks.Callback):
+    def on_epoch_end(self, epoch, logs=None):
+        # Save model as .h5 at the end of each epoch
+        if logs is not None and logs.get('val_loss') == min(logs.get('val_loss'), epoch):
+            self.model.save('InceptionV3.h5')
 
-# Train the model with both checkpoints
+save_h5_callback = SaveH5Callback()
+
+# Train the model with both WandBModelCheckpoint and SaveH5Callback
 history = model.fit(
     train_generator,
     epochs=epochs,
     validation_data=validation_generator,
-    callbacks=[early_stopping, metrics_logger, wandb_checkpoint, h5_checkpoint]  # ใช้ทั้งสอง callback
+    callbacks=[early_stopping, metrics_logger, wandb_checkpoint, save_h5_callback]  # ใช้ callback บันทึก .keras และ .h5
 )
 # Evaluate the model
 evaluation_results = model.evaluate(validation_generator)
