@@ -114,6 +114,8 @@ history = model.fit(
     validation_data=validation_generator,
     callbacks=[early_stopping, metrics_logger, wandb_checkpoint, save_h5_callback]  # ใช้ callback บันทึก .keras และ .h5
 )
+model.save('Inception_V3.h5')
+print("โมเดลถูกบันทึกเป็น Inception_V3.h5")
 # Evaluate the model
 evaluation_results = model.evaluate(validation_generator)
 val_loss, val_accuracy = evaluation_results[0], evaluation_results[1]
