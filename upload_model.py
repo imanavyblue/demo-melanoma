@@ -11,10 +11,10 @@ if HF_API_TOKEN:
     # อัปโหลดไฟล์โมเดลไปยัง Hugging Face
     api.upload_file(
         path_or_fileobj="Inception_V3.h5",  # ไฟล์โมเดลในเครื่อง
-        path_in_repo="Inception_V3.h5",  # ชื่อไฟล์ที่จะบันทึกใน Hugging Face repository
-        repo_id="Suphawan/Melanoma-3",  # Repository ของคุณ
-        repo_type="model",  # ประเภทของ repository
-        token=HF_API_TOKEN  # ใช้ API token สำหรับการยืนยันตัวตน
+        path_in_repo="Inception_V3.h5",      # ชื่อไฟล์ที่จะบันทึกใน Hugging Face repository
+        repo_id="Suphawan/Melanoma-3",       # Repository ของคุณ
+        repo_type="model",                   # ประเภทของ repository
+        token=HF_API_TOKEN                   # ใช้ API token สำหรับการยืนยันตัวตน
     )
     print("อัปโหลดโมเดลเสร็จสมบูรณ์")
 else:
