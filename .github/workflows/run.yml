@@ -29,7 +29,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install wandb
-          pip install huggingface_hub  # ติดตั้ง Hugging Face CLI
+          pip install huggingface_hub  # ติดตั้ง Hugging Face Python API
 
       # Step 4: Set WANDB_API_KEY environment variable (No need for wandb login)
       - name: Set WANDB_API_KEY
@@ -45,12 +45,13 @@ jobs:
         run: |
           python train.py
 
-      # Step 6: Upload model to Hugging Face
+      # Step 6: Upload model to Hugging Face using Python script
       - name: Upload model to Hugging Face
         env:
-          HF_API_TOKEN: ${{ secrets.HF_API_TOKEN }}  # ใช้ Hugging Face API token
+          HF_API_TOKEN: ${{ secrets.HF_API_TOKEN }}  # ตั้งค่า HF_API_TOKEN จาก GitHub Secrets
         run: |
-          huggingface-cli upload Inception_V3.h5 --repo Suphawan/Melanoma-3 --repo-type model --token $HF_API_TOKEN
+          python upload_model.py
+
       # Step 7: Archive training logs and artifacts (Optional)
       - name: Archive training logs
         uses: actions/upload-artifact@v3
