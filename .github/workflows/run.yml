@@ -31,7 +31,7 @@ jobs:
           pip install wandb
           pip install huggingface_hub  # ติดตั้ง Hugging Face Python API
 
-      # Step 4: Set WANDB_API_KEY environment variable (No need for wandb login)
+      # Step 4: Set WANDB_API_KEY environment variable
       - name: Set WANDB_API_KEY
         env:
           WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}  # ดึง API Key จาก GitHub Secrets
@@ -45,14 +45,19 @@ jobs:
         run: |
           python train.py
 
-      # Step 6: Upload model to Hugging Face using Python script
+      # Step 6: List files to verify model is saved
+      - name: List files in directory
+        run: |
+          ls -al
+
+      # Step 7: Upload model to Hugging Face using Python script
       - name: Upload model to Hugging Face
         env:
           HF_API_TOKEN: ${{ secrets.HF_API_TOKEN }}  # ตั้งค่า HF_API_TOKEN จาก GitHub Secrets
         run: |
           python upload_model.py
 
-      # Step 7: Archive training logs and artifacts (Optional)
+      # Step 8: Archive training logs and artifacts (Optional)
       - name: Archive training logs
         uses: actions/upload-artifact@v3
         with:
