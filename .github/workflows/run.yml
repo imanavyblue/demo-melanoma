@@ -1,12 +1,10 @@
-name: Retrain InceptionV3 Model
+name: Train Model
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-  workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * 0'  # รันทุกวันอาทิตย์เวลา 00:00 UTC
 
 jobs:
   train_model:
@@ -29,37 +27,17 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install wandb
-          pip install huggingface_hub  # ติดตั้ง Hugging Face Python API
 
-      # Step 4: Set WANDB_API_KEY environment variable
-      - name: Set WANDB_API_KEY
-        env:
-          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}  # ดึง API Key จาก GitHub Secrets
-        run: |
-          echo "WANDB_API_KEY is set."
-
-      # Step 5: Run training script
+      # Step 4: Run training script
       - name: Train model
         env:
-          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}  # ตั้ง WANDB_API_KEY เป็น environment variable
+          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
         run: |
           python train.py
 
-      # Step 6: List files to verify model is saved
-      - name: List files in directory
-        run: |
-          ls -al
-
-      # Step 7: Upload model to Hugging Face using Python script
-      - name: Upload model to Hugging Face
-        env:
-          HF_API_TOKEN: ${{ secrets.HF_API_TOKEN }}  # ตั้งค่า HF_API_TOKEN จาก GitHub Secrets
-        run: |
-          python upload_model.py
-
-      # Step 8: Archive training logs and artifacts (Optional)
-      - name: Archive training logs
+      # Step 5: Archive model and training logs (Optional)
+      - name: Archive model and logs
         uses: actions/upload-artifact@v3
         with:
-          name: training-logs
-          path: wandb/
+          name: trained-model
+          path: Inception_V3.h5
