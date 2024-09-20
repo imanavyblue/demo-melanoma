@@ -1,13 +1,10 @@
-name: Train Model
+name: Train and Upload Model
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 jobs:
-  train_model:
+  train_and_upload:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,7 +23,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install wandb
+          pip install wandb huggingface_hub
 
       # Step 4: Run training script
       - name: Train model
@@ -35,9 +32,21 @@ jobs:
         run: |
           python train.py
 
-      # Step 5: Archive model and training logs (Optional)
-      - name: Archive model and logs
+      # Step 5: List files (verify model saved)
+      - name: List files in directory
+        run: |
+          ls -al
+
+      # Step 6: Save model as artifact
+      - name: Save model as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: trained-model
+          name: Inception_V3_model
           path: Inception_V3.h5
+
+      # Step 7: Upload model to Hugging Face
+      - name: Upload model to Hugging Face
+        env:
+          HF_API_TOKEN: ${{ secrets.HF_API_TOKEN }}
+        run: |
+          huggingface-cli upload Inception_V3.h5 --repo Suphawan/Melanoma-3 --repo-type model --token $HF_API_TOKEN
