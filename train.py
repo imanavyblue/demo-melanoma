@@ -87,7 +87,7 @@ early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weig
 # WandB callbacks
 metrics_logger = WandbMetricsLogger()
 wandb_checkpoint = WandbModelCheckpoint(
-    filepath='InceptionV3_epoch_{epoch:02d}.h5',
+    filepath='inceptionv3_epoch_{epoch:02d}.weights.h5',
     monitor='val_loss',
     save_best_only=True,
     save_weights_only=False
