@@ -84,10 +84,10 @@ model.summary()
 # Early stopping callback
 early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
 
-# WandB callbacks
+# WandB callbacks (use .keras format for WandbModelCheckpoint)
 metrics_logger = WandbMetricsLogger()
 wandb_checkpoint = WandbModelCheckpoint(
-    filepath='inceptionv3_epoch_{epoch:02d}.weights.h5',
+    filepath='InceptionV3_epoch_{epoch:02d}.keras',  # เปลี่ยนเป็นฟอร์แมต .keras
     monitor='val_loss',
     save_best_only=True,
     save_weights_only=False
@@ -102,6 +102,7 @@ history = model.fit(
 )
 
 # Save the final model as .h5 and upload to W&B
+model.save('Inception_V3.h5')  # บันทึกโมเดลเป็น .h5
 wandb.save('Inception_V3.h5')  # บันทึกโมเดลไปยัง Weights & Biases
 
 # Evaluate the model
