@@ -87,31 +87,22 @@ early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weig
 # WandB callbacks
 metrics_logger = WandbMetricsLogger()
 wandb_checkpoint = WandbModelCheckpoint(
-    filepath='InceptionV3_epoch_{epoch:02d}.keras',
+    filepath='InceptionV3_epoch_{epoch:02d}.h5',
     monitor='val_loss',
     save_best_only=True,
     save_weights_only=False
 )
-
-# Custom callback to save model as .h5 after training
-class SaveH5Callback(tf.keras.callbacks.Callback):
-    def on_epoch_end(self, epoch, logs=None):
-        if logs is not None and logs.get('val_loss') == min(logs.get('val_loss'), epoch):
-            self.model.save('Inception_V3.h5')
-
-save_h5_callback = SaveH5Callback()
 
 # Train the model
 history = model.fit(
     train_generator,
     epochs=epochs,
     validation_data=validation_generator,
-    callbacks=[early_stopping, metrics_logger, wandb_checkpoint, save_h5_callback]
+    callbacks=[early_stopping, metrics_logger, wandb_checkpoint]
 )
 
-# Save the final model as .h5
-model.save('Inception_V3.h5')
-print("โมเดลถูกบันทึกเป็น Inception_V3.h5")
+# Save the final model as .h5 and upload to W&B
+wandb.save('Inception_V3.h5')  # บันทึกโมเดลไปยัง Weights & Biases
 
 # Evaluate the model
 evaluation_results = model.evaluate(validation_generator)
