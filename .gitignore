@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Data
+train/
+test/
+train_balanced/
+train_data/
+validation_data/
+
+# Models
+*.h5
+*.keras
+
+# W&B
+wandb/
+.wandb/
